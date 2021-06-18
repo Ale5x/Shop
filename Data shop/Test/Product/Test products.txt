@@ -1,0 +1,32 @@
+B1  N(Toy)	Dtrue	P5.5
+B2  N(Car 2)	Dfalse	P14.0
+B3  N(Car 1)	Dtrue	P3.0
+B4  N(Car 7)	Dfalse	P7.0
+B158964 N(Car from Canada)  Dfalse  P15.9
+B2158964 N(Toy from Canada)  Dfalse  P15.9
+B1581964 N(Car 1 from Canada)  Dtrue  P515.9
+B1358964 N(Car 2 from Canada)  Dfalse  P15.9
+B4158964 N(Car from Canada)  Dfalse  P145.69
+B1258964 N(Toy from Canada)  Dfalse  P15.09
+B4158964 N(Car 11 from Canada)  Dtrue  P15.89
+B558964 N(Car 12 from Canada)  Dfalse  P415.9
+B1675864 N(Car 13 from Canada)  Dfalse  P15.49
+B958964 N(Toy 14 from Canada)  Dfalse  P155.9
+B4534158 N(Car 15 from Canada)  Dtrue  P15.59
+B134534 N(Car 16 from Canada)  Dfalse  P165.29
+B124235 N(Car 17 from Canada)  Dfalse  P155.9
+B1656345 N(Toy 18 from Canada)  Dfalse  P715.9
+B352245 N(Car 19 from Canada)  Dtrue  P415.59
+B446646 N(Car 20 from Canada)  Dfalse  P152.9
+B2566564 N(Car 21 from Canada)  Dfalse  P15.69
+B254546 N(Toy 22 from Canada)  Dfalse  P152.9
+B235656 N(Car 23 from Canada)  Dfalse  P175.9
+B254546 N(Car 24 from Canada)  Dtrue  P715.9
+B235465 N(Car 25 from Canada)  Dtrue  P815.329
+B676753 N(Toy 26 from Canada)  Dfalse  P195.9
+B956767 N(Car 27 from Canada)  Dtrue  P215.92
+B857674 N(Car 28 from Canada)  Dfalse  P115.9
+B975674 N(Car 29 from Canada)  Dfalse  P5615.9
+B879745 N(Z Toy 30 from Canada)  Dtrue  P715.9
+B768564 N(A Car 31 from Canada)  Dfalse  P915.19
+B7688756 N(Car 32 from Canada)  Dtrue  P7915.9
