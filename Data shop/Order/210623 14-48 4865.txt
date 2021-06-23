@@ -1,0 +1,15 @@
+Client: Alexander G
+Address: Belarus, sity.... street.... house....
+Receipt №210623 14-48 4865
+Use discount Card: 1111
+====================================================================================================
+Barcode                                            Product name                                Count
+
+ 
+4812941000461     Alpen Gold with strawberry (made in CANADA)                                      5 
+4812941000461     Alpen Gold with Cherry (made in CANADA)                                          3 
+4812941000461     Ice cream 90ic (made in Mexico)                                                  5 
+4812941000461     Water and Water Cranberr 1l (made in Belarus)                                    3
+
+====================================================================================================
+                                    Wed Jun 23 14:48:49 MSK 2021

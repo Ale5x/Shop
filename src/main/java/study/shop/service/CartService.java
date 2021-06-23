@@ -48,7 +48,7 @@ public class CartService {
                 countDiscountProduct = countDiscountProduct + 1 * cart.getCount();
             }
         }
-        if(countDiscountProduct >= DataShop.COUNT_DISCOUNT_DEFAULT) {
+        if(countDiscountProduct >= DataShop.COUNT_PRODUCT_DISCOUNT_DEFAULT) {
             return Double.parseDouble(formatPrice.format(discountPrice));
         }
         return 0;

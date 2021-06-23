@@ -4,25 +4,22 @@ import java.util.Objects;
 
 public class Card {
 
-//    private final static String FILE_CARD_PATH = "Data shop/Discount Cards/List discount cards.txt";
-//    private static List<Integer> listCard = new ArrayList<>();
-
-    private long idCard;
+    private String idCard;
     private double percent;
 
     public Card() {
     }
 
-    public Card(long idCard, double percent) {
+    public Card(String idCard, double percent) {
         this.idCard = idCard;
         this.percent = percent;
     }
 
-    public long getIdCard() {
+    public String getIdCard() {
         return idCard;
     }
 
-    public void setIdCard(long idCard) {
+    public void setIdCard(String idCard) {
         this.idCard = idCard;
     }
 

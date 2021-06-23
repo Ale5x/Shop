@@ -5,125 +5,147 @@ import org.junit.Test;
 import study.shop.model.product.EProduct;
 import study.shop.model.product.Product;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import static org.junit.Assert.*;
 
 public class ProductServiceTest {
 
     ProductService productService;
-    private String pathTestProduct = "Data shop/Test/Product/Test products.txt";
-    private List<Product> productList = new ArrayList<>();
+    private List<Product> productTestList;
 
     @Before
     public void setUp() throws Exception {
-
-        productService = new ProductService();
+        productService = new ProductService(EProduct.TEST);
     }
 
     @Test
-    public void showByMaxPrice() {
-        productList = productService.showByMaxPrice();
-        for(Product product : productList) {
-            System.out.println(product.toString());
+    public void sortByMaxPrice() {
+        List<Product> resultList = productService.sortByMaxPrice();
+        assertTrue(resultList.get(0).getPrice() >= resultList.get(1).getPrice());
+    }
+
+    @Test
+    public void sortByMinPrice() {
+        List<Product> resultList = productService.sortByMinPrice();
+        assertTrue(resultList.get(0).getPrice() <= resultList.get(1).getPrice());
+    }
+
+    @Test
+    public void sortByDiscount() {
+        List<Product> resultList = productService.sortByDiscount();
+        assertTrue(resultList.get(0).isDiscount());
+    }
+
+    @Test
+    public void sortByNotDiscount() {
+        List<Product> resultList = productService.sortByNotDiscount();
+        assertFalse(resultList.get(0).isDiscount());
+    }
+
+    @Test
+    public void sortNameReverse() {
+    }
+
+    @Test
+    public void sortName() {
+    }
+
+    @Test
+    public void sortByMaxBarcode() {
+        String expected = "999999999";
+        List<Product> resultList = productService.sortByMaxBarcode();
+        String actual = resultList.get(0).getBarcode();
+        assertTrue(expected.equals(actual));
+    }
+
+    @Test
+    public void sortByMinBarcode() {
+        String expected = "1000000012";
+        List<Product> resultList = productService.sortByMinBarcode();
+        String actual = resultList.get(0).getBarcode();
+        assertTrue(expected.equals(actual));
+    }
+
+    @Test
+    public void findByBarcode() {
+//        B4  N(Car 7)	Dfalse	P7.0
+        String barcode = "4";
+        Optional<Product> optional = productService.findByBarcode(barcode);
+        String expected = "4";
+        String actual = optional.map(Product::getBarcode).orElse("0");
+        assertTrue(expected.equals(actual));
+    }
+
+    @Test
+    public void findByNotCorrectBarcode() {
+//        B4  N(Car 7)	Dfalse	P7.0
+        String barcode = "000123";
+        Optional<Product> optional = productService.findByBarcode(barcode);
+        String expected = "0";
+        String actual = optional.map(Product::getBarcode).orElse("0");
+        assertEquals(expected, actual);
+    }
+
+    @Test
+    public void findAllByName() {
+        String name = "car 7";
+        List<Product> resultList = productService.findAllByName(name);
+        assertFalse(resultList.isEmpty());
+    }
+
+    @Test
+    public void findAllBetweenPrice() {
+        double minPrice = 5;
+        double maxPrice = 20;
+        List<Product> resultList = productService.findAllBetweenPrice(minPrice, maxPrice);
+        boolean flag = true;
+        for(Product product : resultList) {
+            if(product.getPrice() > maxPrice && product.getPrice() < maxPrice) {
+                flag = false;
+            }
         }
-        assertTrue(productList.get(1).getPrice() >= productList.get(2).getPrice());
+        assertTrue(flag);
     }
 
     @Test
-    public void showByMinPrice() {
-        List<Product> listResult;
-        listResult = productService.showByMinPrice();
-        for(Product product : listResult) {
-            System.out.println(product.toString());
+    public void showOnlyDiscount() {
+        List<Product> resultList = productService.showOnlyDiscount();
+        boolean flag = true;
+        for(Product product : resultList) {
+            if(!product.isDiscount()) {
+                flag = false;
+            }
         }
-        assertTrue(listResult.get(1).getPrice() <= listResult.get(2).getPrice());
+        assertTrue(flag);
     }
 
     @Test
-    public void showByDiscount() {
-        List<Product> listResult;
-        listResult = productService.showByDiscount();
-        for(Product product : listResult) {
-            System.out.println(product.toString());
+    public void showOnlyNotDiscount() {
+        List<Product> resultList = productService.showOnlyNotDiscount();
+        boolean flag = true;
+        for(Product product : resultList) {
+            if(product.isDiscount()) {
+                flag = false;
+            }
         }
-        assertTrue(listResult.get(1).isDiscount());
-    }
-
-    @Test
-    public void showByNotDiscount() {
-        List<Product> listResult;
-        listResult = productService.showByNotDiscount();
-        for(Product product : listResult) {
-            System.out.println(product.toString());
-        }
-        assertFalse(listResult.get(1).isDiscount());
-    }
-
-    @Test
-    public void showBySortNameReverse() {
-    }
-
-    @Test
-    public void showBySortName() {
-    }
-
-    @Test
-    public void showByMaxBarcode() {
-    }
-
-    @Test
-    public void showByMinBarcode() {
-    }
-
-    @Test
-    public void getByBarcode() {
-    }
-
-    @Test
-    public void getByName() {
-    }
-
-    @Test
-    public void getByPrice() {
-    }
-
-    @Test
-    public void getByDiscount() {
-    }
-
-    @Test
-    public void getByNotDiscount() {
+        assertTrue(flag);
     }
 
     @Test
     public void showAll() {
-        productService.setPathFile(pathTestProduct);
-        List<Product> listResult;
-        listResult = productService.showAll();
-        for(Product product : listResult) {
-            System.out.println(product.toString());
-        }
-        System.out.println("Size - " + listResult.size());
-        assertTrue(listResult.isEmpty());
+        List<Product> listResult = productService.showAll();
+        assertFalse(listResult.isEmpty());
     }
 
     @Test
     public void showAllByPage() {
-    }
-
-    @Test
-    public void setPathFile() {
-        productService.setPathFile(pathTestProduct);
-    }
-
-
-    public String getPathFile() {
-        return pathTestProduct;
-    }
-
-    public Enum getCategory() {
-        return EProduct.CHILDREN;
+        int page = 2;
+        int count = 5;
+        List<Product> resultList = productService.showAllByPage(page, count);
+        long expected = page * count;
+        long actual = resultList.get(count - 1).getIdProduct();
+        assertEquals(expected, actual);
     }
 }

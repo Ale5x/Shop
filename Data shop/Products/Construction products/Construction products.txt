@@ -1,0 +1,12 @@
+B1  N(Construction product 1 1 -1)	Dtrue	P5.5
+B2  N(Construction product 1 1 -2)	Dfalse	P14.0
+B3  N(Construction product 1 2 -3)	Dtrue	P3.0
+B4  N(Construction product 1 5 -7)	Dfalse	P7.0
+B5  N(Construction product 22 1 -1)	Dtrue	P5.5
+B6  N(Construction product 2 1 -2)	Dfalse	P14.0
+B7  N(Construction product 3 2 -3)	Dtrue	P3.0
+B8  N(Construction product 4 5 -7)	Dfalse	P7.0
+B9  N(Construction product 2 1 -1)	Dtrue	P5.5
+B10  N(Construction product 1 1 -2)	Dfalse	P14.0
+B11  N(Construction product 4 2 -3)	Dtrue	P3.0
+B12  N(Construction product 5 5 -7)	Dfalse	P7.0

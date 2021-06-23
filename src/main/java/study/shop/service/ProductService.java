@@ -1,20 +1,21 @@
 package study.shop.service;
 
-import study.shop.io.ReaderData;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+import study.shop.constant.DataShop;
+import study.shop.exception.ServiceException;
+import study.shop.io.ReadDataFromFileW;
 import study.shop.model.product.EProduct;
 import study.shop.model.product.Product;
 
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.List;
+import java.util.*;
 
-public class ProductService {
+public class ProductService implements ProductServiceI<Product> {
 
-    private String pathFile;
-    private Enum productCategory = EProduct.UNKNOWN;
+    private static final Logger logger = LogManager.getLogger(ProductService.class);
+
     private static final String REGEX_BARCODE = "B[\\w]*";
     private static final String REGEX_PRICE = "P\\d*\\.?\\d*";
     private static final String REGEX_DISCOUNT = "D[\\w]*";
@@ -23,93 +24,112 @@ public class ProductService {
 
     private List<Product> productList = new ArrayList<>();
 
-    public ProductService() {
-        if(productList.isEmpty()) {
-            if(Files.exists(Paths.get(getPathFile()))) {
-                ReaderData readerData = new ReaderData();
-                List<String> linesList = readerData.readAll(getPathFile());
+    public ProductService(EProduct eProduct) throws ServiceException {
+        try {
+            //if(Files.exists(Paths.get(eProduct.getPathProduct()))) {
+                ReadDataFromFileW readDataFromFileW = new ReadDataFromFileW();
+                List<String> linesList = readDataFromFileW.readAll(eProduct.getPathProduct());
 
+                long idProduct = 1;
                 for (String line : linesList) {
                     if(line.length() > 3) {
-                        productList.add(new Product(Long.parseLong(ReaderData.parseData(line, REGEX_BARCODE)),
-                                ReaderData.parseData(line, REGEX_NAME),
-                                new Boolean(ReaderData.parseData(line, REGEX_DISCOUNT)),
-                                Double.parseDouble(ReaderData.parseData(line, REGEX_PRICE)),
-                                getCategory()));
+                        productList.add(new Product(idProduct, ReadDataFromFileW.parseData(line, REGEX_BARCODE),
+                                ReadDataFromFileW.parseData(line, REGEX_NAME),
+                                new Boolean(ReadDataFromFileW.parseData(line, REGEX_DISCOUNT)),
+                                Double.parseDouble(ReadDataFromFileW.parseData(line, REGEX_PRICE)),
+                                eProduct.getCategory()));
+                        idProduct++;
                     }
                 }
-            }
+           // }
+        }catch (ServiceException e) {
+            logger.error(DataShop.ERROR_PRODUCT_NOT_INIT + DataShop.CATEGORY + eProduct.getCategory()
+                        + " " + DataShop.ERROR_PATH_FILE + eProduct.getPathProduct(), e);
+            throw new ServiceException(e);
         }
     }
 
-    public List<Product> showByMaxPrice() {
+    @Override
+    public List<Product> sortByMaxPrice() {
         Collections.sort(productList, Collections.reverseOrder(Comparator.comparing(Product::getPrice)));
         return productList;
     }
 
-    public List<Product> showByMinPrice() {
-        Collections.reverse(showByMaxPrice());
+    @Override
+    public List<Product> sortByMinPrice() {
+        Collections.reverse(sortByMaxPrice());
         return productList;
     }
 
-    public List<Product> showByDiscount() {
+    @Override
+    public List<Product> sortByDiscount() {
         Collections.sort(productList, Collections.reverseOrder(Comparator.comparing(Product::isDiscount)));
         return productList;
     }
-    public List<Product> showByNotDiscount() {
-        Collections.reverse(showByDiscount());
+    @Override
+    public List<Product> sortByNotDiscount() {
+        Collections.reverse(sortByDiscount());
         return productList;
     }
 
-    public List<Product> showBySortNameReverse() {
+    @Override
+    public List<Product> sortNameReverse() {
         Collections.sort(productList, Collections.reverseOrder(Comparator.comparing(Product::getName)));
         return productList;
     }
 
-    public List<Product> showBySortName() {
-        Collections.reverse(showBySortNameReverse());
+    @Override
+    public List<Product> sortName() {
+        Collections.reverse(sortNameReverse());
         return productList;
     }
 
-    public List<Product> showByMaxBarcode() {
-        Collections.sort(productList, Collections.reverseOrder(Comparator.comparing(Product::getIdProduct)));
+    @Override
+    public List<Product> sortByMaxBarcode() {
+        Collections.sort(productList, Collections.reverseOrder(Comparator.comparing(Product::getBarcode)));
         return productList;
     }
 
-    public List<Product> showByMinBarcode() {
-        Collections.reverse(showByMaxBarcode());
+    @Override
+    public List<Product> sortByMinBarcode() {
+        Collections.reverse(sortByMaxBarcode());
         return productList;
     }
 
-    public Product showByBarcode(long barcode) {
+    @Override
+    public Optional findByBarcode(String barcode) {
         for (Product product : productList) {
-            if(product.getIdProduct() == barcode) {
-                return product;
+            if(product.getBarcode().equals(barcode)) {
+                return Optional.of(product);
             }
         }
-        return null;
+        return Optional.empty();
     }
 
-    public List<Product> showByName(String name) {
+    @Override
+    public List<Product> findAllByName(String name) {
         List<Product> result = new ArrayList<>();
+
         for (Product product : productList) {
-            if(product.equals(product.getName())) {
+            if(product.getName().toLowerCase().contains(name.toLowerCase())) {
                 result.add(product);
             }
         }
         return result;
     }
 
-    public List<Product> showByPrice(int min, int max) {
+    @Override
+    public List<Product> findAllBetweenPrice(double minPrice, double maxPrice) {
         List<Product> result = new ArrayList<>();
         for (Product product : productList) {
-            if(product.getPrice() >= min && product.getPrice() <= max) {
+            if(product.getPrice() >= minPrice && product.getPrice() <= maxPrice) {
                 result.add(product);
             }
         }
         return result;
     }
 
+    @Override
     public List<Product> showOnlyDiscount() {
         List<Product> result = new ArrayList<>();
         for (Product product : productList) {
@@ -120,6 +140,7 @@ public class ProductService {
         return result;
     }
 
+    @Override
     public List<Product> showOnlyNotDiscount() {
         List<Product> result = new ArrayList<>();
         for (Product product : productList) {
@@ -130,27 +151,17 @@ public class ProductService {
         return result;
     }
 
+    @Override
     public List<Product> showAll() {
         return productList;
     }
 
+    @Override
     public List<Product> showAllByPage(int page, int countOnPage) {
         List<Product> result = new ArrayList<>();
-        for(int i = page * countOnPage - countOnPage; i < page * countOnPage + countOnPage; i++) {
+        for(int i = page * countOnPage - countOnPage; i < page * countOnPage; i++) {
             result.add(productList.get(i));
         }
         return result;
-    }
-
-    public String getPathFile() {
-        return pathFile;
-    }
-
-    public Enum getCategory() {
-        return productCategory;
-    }
-
-    public void setPathFile(String pathFile) {
-        this.pathFile = pathFile;
     }
 }
